@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>专业手速测试</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --dark-bg: #121212;
+            --dark-card: #1e1e1e;
+            --dark-text: #f5f5f5;
+            --light-bg: #f8f9fa;
+            --light-card: #ffffff;
+            --light-text: #333333;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --danger: #f44336;
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: var(--transition);
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        body.light-mode {
+            background-color: var(--light-bg);
+            color: var(--light-text);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background-color: var(--dark-card);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+            position: relative;
+            z-index: 10;
+            transition: var(--transition);
+        }
+        
+        body.light-mode .container {
+            background-color: var(--light-card);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        body.light-mode header {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .control-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--dark-text);
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+        
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        body.light-mode .control-btn {
+            background: rgba(0, 0, 0, 0.05);
+            color: var(--light-text);
+        }
+        
+        body.light-mode .control-btn:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        
+        .game-area {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 25px;
+        }
+        
+        .target-container {
+            position: relative;
+            height: 500px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            border: 2px dashed rgba(255, 255, 255, 0.15);
+        }
+        
+        body.light-mode .target-container {
+            background: rgba(0, 0, 0, 0.03);
+            border: 2px dashed rgba(0, 0, 0, 0.1);
+        }
+        
+        .target {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(255, 75, 43, 0.4);
+            transition: transform 0.1s, width 0.3s, height 0.3s;
+            position: absolute;
+            overflow: hidden;
+        }
+        
+        .target img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        
+        .target:hover {
+            transform: scale(1.05);
+        }
+        
+        .target:active {
+            transform: scale(0.95);
+        }
+        
+        .stats-panel {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            transition: var(--transition);
+        }
+        
+        body.light-mode .stats-panel {
+            background: rgba(0, 0, 0, 0.03);
+        }
+        
+        .stat-section {
+            margin-bottom: 30px;
+        }
+        
+        .stat-section h2 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .stat-box {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: var(--transition);
+        }
+        
+        body.light-mode .stat-box {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--accent);
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        body.light-mode .stat-label {
+            color: #666;
+        }
+        
+        .settings-panel {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-top: 25px;
+            transition: var(--transition);
+        }
+        
+        body.light-mode .settings-panel {
+            background: rgba(0, 0, 0, 0.03);
+        }
+        
+        .customization {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .color-picker {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: var(--transition);
+        }
+        
+        .color-option.active {
+            border-color: white;
+            transform: scale(1.1);
+        }
+        
+        .upload-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .upload-btn:hover {
+            background: var(--secondary);
+        }
+        
+        #image-upload {
+            display: none;
+        }
+        
+        .rank-display {
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.15), rgba(63, 55, 201, 0.15));
+            border-radius: var(--border-radius);
+            padding: 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .rank-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+        
+        .rank-range {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #aaa;
+        }
+        
+        body.light-mode .rank-range {
+            color: #666;
+        }
+        
+        .rank-description {
+            font-style: italic;
+            color: #ddd;
+            line-height: 1.5;
+        }
+        
+        body.light-mode .rank-description {
+            color: #555;
+        }
+        
+        .game-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .game-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .start-btn {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .start-btn:hover {
+            background: var(--secondary);
+        }
+        
+        .reset-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--dark-text);
+        }
+        
+        .reset-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        body.light-mode .reset-btn {
+            background: rgba(0, 0, 0, 0.05);
+            color: var(--light-text);
+        }
+        
+        body.light-mode .reset-btn:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Floating elements */
+        .floating {
+            position: absolute;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.7;
+            font-size: 1.8rem;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px) rotate(360deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+        
+        .floating-text {
+            position: absolute;
+            pointer-events: none;
+            z-index: 1;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.3);
+            animation: float-text 25s infinite linear;
+            white-space: nowrap;
+        }
+        
+        body.light-mode .floating-text {
+            color: rgba(0, 0, 0, 0.2);
+        }
+        
+        @keyframes float-text {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-80vh) translateX(200px) rotate(5deg);
+                opacity: 0;
+            }
+        }
+        
+        .timer-display {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            background: rgba(0, 0, 0, 0.4);
+            padding: 8px 20px;
+            border-radius: 30px;
+        }
+        
+        .result-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            z-index: 20;
+            border-radius: var(--border-radius);
+        }
+        
+        .result-overlay.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .result-title {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+            text-align: center;
+        }
+        
+        .result-cps {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 40px;
+            color: white;
+        }
+        
+        .result-rank {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #ffcc00;
+            text-align: center;
+            max-width: 80%;
+        }
+        
+        .result-description {
+            font-size: 1.3rem;
+            color: #ddd;
+            text-align: center;
+            max-width: 80%;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+        
+        .close-result {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .close-result:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+        }
+        
+        /* Settings dropdown */
+        .settings-dropdown {
+            position: absolute;
+            top: 70px;
+            right: 10px;
+            background: var(--dark-card);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            width: 300px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-10px);
+            transition: var(--transition);
+        }
+        
+        body.light-mode .settings-dropdown {
+            background: var(--light-card);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .settings-dropdown.show {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateY(0);
+        }
+        
+        .settings-dropdown h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 900px) {
+            .game-area {
+                grid-template-columns: 1fr;
+            }
+            
+            .target-container {
+                height: 400px;
+            }
+            
+            .settings-dropdown {
+                width: 280px;
+                top: 65px;
+                right: 5px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .stat-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .customization {
+                grid-template-columns: 1fr;
+            }
+            
+            .game-buttons {
+                flex-direction: column;
+            }
+            
+            .settings-dropdown {
+                width: 95%;
+                left: 2.5%;
+                right: auto;
+                top: 60px;
+            }
+            
+            .target {
+                width: 120px;
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating emojis and text -->
+    <div class="floating" style="top: 10%; left: 5%; animation-duration: 18s;">🔫</div>
+    <div class="floating" style="top: 20%; left: 80%; animation-duration: 22s;">🎯</div>
+    <div class="floating" style="top: 40%; left: 15%; animation-duration: 25s;">💥</div>
+    <div class="floating" style="top: 60%; left: 70%; animation-duration: 20s;">🔥</div>
+    <div class="floating" style="top: 30%; left: 45%; animation-duration: 17s;">⚡</div>
+    <div class="floating" style="top: 75%; left: 25%; animation-duration: 23s;">👾</div>
+    
+    <div class="floating-text" style="top: 15%; left: 20%; animation-duration: 30s;">菜就多练</div>
+    <div class="floating-text" style="top: 25%; left: 65%; animation-duration: 35s;">我马枪了</div>
+    <div class="floating-text" style="top: 55%; left: 10%; animation-duration: 28s;">人形自走挂</div>
+    <div class="floating-text" style="top: 85%; left: 75%; animation-duration: 32s;">电子厂预备役</div>
+    <div class="floating-text" style="top: 45%; left: 80%; animation-duration: 40s;">战术核显卡</div>
+    
+    <div class="container">
+        <header>
+            <h1>专业手速测试</h1>
+            <div class="controls">
+                <button class="control-btn" id="theme-toggle" title="切换主题">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="control-btn" id="settings-toggle" title="设置">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <button class="control-btn" id="info-btn" title="游戏说明">
+                    <i class="fas fa-info-circle"></i>
+                </button>
+            </div>
+        </header>
+        
+        <div class="game-area">
+            <div class="target-container" id="target-container">
+                <div class="target" id="target">
+                    <!-- Target will be here -->
+                </div>
+                <div class="timer-display" id="timer">30秒</div>
+                <div class="result-overlay" id="result-overlay">
+                    <div class="result-title">测试完成!</div>
+                    <div class="result-cps" id="result-cps">0.00 CPS</div>
+                    <div class="result-rank" id="result-rank">人体描边师</div>
+                    <div class="result-description" id="result-description">子弹永远在给敌人画轮廓，主打一个艺术效果</div>
+                    <button class="close-result" id="close-result">关闭结果</button>
+                </div>
+            </div>
+            
+            <div class="stats-panel">
+                <div class="stat-section">
+                    <h2><i class="fas fa-chart-line"></i> 实时数据</h2>
+                    <div class="stat-grid">
+                        <div class="stat-box">
+                            <div class="stat-value" id="score">0</div>
+                            <div class="stat-label">得分</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value" id="time-left">30</div>
+                            <div class="stat-label">剩余时间</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value" id="cps">0.00</div>
+                            <div class="stat-label">每秒点击</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value" id="level">1</div>
+                            <div class="stat-label">当前等级</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stat-section">
+                    <h2><i class="fas fa-trophy"></i> 当前段位</h2>
+                    <div class="rank-display">
+                        <div class="rank-title" id="current-rank">初入江湖</div>
+                        <div class="rank-range" id="rank-range">0.0 - 2.0 CPS</div>
+                        <div class="rank-description" id="rank-description">新手阶段，需要多加练习提高手速</div>
+                    </div>
+                </div>
+                
+                <div class="game-buttons">
+                    <button class="game-btn start-btn" id="start-btn">开始测试</button>
+                    <button class="game-btn reset-btn" id="reset-btn">重新开始</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Settings dropdown -->
+        <div class="settings-dropdown" id="settings-dropdown">
+            <h3><i class="fas fa-sliders-h"></i> 高级设置</h3>
+            
+            <div class="stat-section">
+                <h2><i class="fas fa-palette"></i> 目标外观</h2>
+                <div class="customization">
+                    <div>
+                        <h3 style="font-size: 1rem; margin-bottom: 10px;">颜色选择</h3>
+                        <div class="color-picker">
+                            <div class="color-option active" style="background: linear-gradient(135deg, #ff416c, #ff4b2b);" data-color="red"></div>
+                            <div class="color-option" style="background: linear-gradient(135deg, #4361ee, #3a0ca3);" data-color="blue"></div>
+                            <div class="color-option" style="background: linear-gradient(135deg, #4cc9f0, #4361ee);" data-color="cyan"></div>
+                            <div class="color-option" style="background: linear-gradient(135deg, #f72585, #b5179e);" data-color="pink"></div>
+                            <div class="color-option" style="background: linear-gradient(135deg, #2ec4b6, #1a936f);" data-color="green"></div>
+                            <div class="color-option" style="background: linear-gradient(135deg, #ff9e00, #ff5400);" data-color="orange"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1rem; margin-bottom: 10px;">自定义外观</h3>
+                        <button class="upload-btn" id="upload-trigger">
+                            <i class="fas fa-upload"></i> 上传图片
+                        </button>
+                        <input type="file" id="image-upload" accept="image/*">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stat-section">
+                <h2><i class="fas fa-bullseye"></i> 目标设置</h2>
+                <div class="game-buttons">
+                    <button class="game-btn reset-btn" id="reset-target-btn">
+                        <i class="fas fa-sync-alt"></i> 重置目标位置
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // DOM elements
+            const target = document.getElementById('target');
+            const startBtn = document.getElementById('start-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const scoreElement = document.getElementById('score');
+            const timeLeftElement = document.getElementById('time-left');
+            const cpsElement = document.getElementById('cps');
+            const levelElement = document.getElementById('level');
+            const timerElement = document.getElementById('timer');
+            const themeToggle = document.getElementById('theme-toggle');
+            const settingsToggle = document.getElementById('settings-toggle');
+            const settingsDropdown = document.getElementById('settings-dropdown');
+            const colorOptions = document.querySelectorAll('.color-option');
+            const uploadTrigger = document.getElementById('upload-trigger');
+            const imageUpload = document.getElementById('image-upload');
+            const resultOverlay = document.getElementById('result-overlay');
+            const resultCps = document.getElementById('result-cps');
+            const resultRank = document.getElementById('result-rank');
+            const resultDescription = document.getElementById('result-description');
+            const closeResult = document.getElementById('close-result');
+            const currentRank = document.getElementById('current-rank');
+            const rankRange = document.getElementById('rank-range');
+            const rankDescription = document.getElementById('rank-description');
+            const resetTargetBtn = document.getElementById('reset-target-btn');
+            const targetContainer = document.getElementById('target-container');
+            
+            // Game variables
+            let score = 0;
+            let timeLeft = 30;
+            let gameActive = false;
+            let timer;
+            let gameTimer;
+            let level = 1;
+            let targetSize = 150; // 初始较大尺寸
+            let startTime;
+            let clicks = 0;
+            
+            // Rank data
+            const ranks = [
+                {
+                    minCPS: 0,
+                    maxCPS: 2,
+                    tier: "初入江湖",
+                    names: [
+                        {name: "人体描边师", desc: "子弹永远在给敌人画轮廓，主打一个艺术效果"},
+                        {name: "夕阳红枪法", desc: "枪口抖动如帕金森，命中全靠信仰"},
+                        {name: "队友压力源", desc: "输出低到让队友怀疑人生，团灭发动机"},
+                        {name: "空大艺术家", desc: "大招永远放空，技能完美避开人群"},
+                        {name: "慈善刮痧师", desc: "伤害低得像给BOSS做免费按摩"}
+                    ]
+                },
+                {
+                    minCPS: 2,
+                    maxCPS: 4,
+                    tier: "手感玄学",
+                    names: [
+                        {name: "随缘枪手", desc: "输出高低全看服务器心情和早餐吃什么"},
+                        {name: "薛定谔的DPS", desc: "输出数值处于量子叠加态，打完才知道是神是鬼"},
+                        {name: "间歇性战神", desc: "偶尔灵光一闪超神，常态是默默无闻"},
+                        {name: "AOE慈善家", desc: "范围技能经常造福对手"},
+                        {name: "爆种体验卡", desc: "短暂爆发后迅速进入贤者模式"}
+                    ]
+                },
+                {
+                    minCPS: 4,
+                    maxCPS: 6,
+                    tier: "稳定输出",
+                    names: [
+                        {name: "稳定扳机", desc: "团队最安心的打工人，输出从不掉链子"},
+                        {name: "无情工具人", desc: "精准执行循环，莫得感情只为完成KPI"},
+                        {name: "及格线战神", desc: "永远在合格线上跳舞，多一分浪费"},
+                        {name: "团队蓄电池", desc: "持续稳定供能，是团队运转的基础"},
+                        {name: "劳模输出机", desc: "勤勤恳恳，输出总量靠时长和毅力"}
+                    ]
+                },
+                {
+                    minCPS: 6,
+                    maxCPS: 8,
+                    tier: "精准打击",
+                    names: [
+                        {name: "要害狙击手", desc: "弱点就是我的靶心，枪枪刀刀烈火"},
+                        {name: "弱点质检员", desc: "专业检测BOSS/敌人弱点是否达标"},
+                        {name: "暴击印刷机", desc: "暴击率/暴击伤害高得离谱，黄字红字刷屏"},
+                        {name: "点杀大师", desc: "优先集火，关键目标瞬间蒸发"},
+                        {name: "电竞王语嫣", desc: "理论精通+操作犀利，打哪指哪"}
+                    ]
+                },
+                {
+                    minCPS: 8,
+                    maxCPS: 10,
+                    tier: "战场主宰",
+                    names: [
+                        {name: "战场收割机", desc: "团战绞肉机，走到哪死到哪"},
+                        {name: "行走的炮台", desc: "火力覆盖范围广，持续压制力极强"},
+                        {name: "团灭发动机", desc: "一人成军，启动就能扭转战局"},
+                        {name: "关键先生/女士", desc: "总是在最需要的时候打出爆炸输出"},
+                        {name: "DPS永动机", desc: "输出高、续航强、生存好，全程在线"}
+                    ]
+                },
+                {
+                    minCPS: 10,
+                    maxCPS: 999,
+                    tier: "人形兵器",
+                    names: [
+                        {name: "战术核显卡", desc: "输出能力足以烧毁显卡，战略级威慑"},
+                        {name: "人形自走挂", desc: "操作和输出强到像开了外挂"},
+                        {name: "因果律兵器", desc: "输出超越游戏机制理解"},
+                        {name: "数值策划之敌", desc: "输出能力突破职业/版本设计上限"},
+                        {name: "服务器压力测试员", desc: "技能特效和伤害数值多到让服务器卡顿"}
+                    ]
+                },
+                {
+                    minCPS: -1,
+                    maxCPS: 0,
+                    tier: "特殊段位",
+                    names: [
+                        {name: "电子厂预备役", desc: "输出低到不如NPC，队友纷纷劝其进厂"},
+                        {name: "高压电焊工", desc: "伤害数字低且密集，像在用电焊枪刮痧"},
+                        {name: "敌我识别障碍者", desc: "经常误伤队友或给敌人加Buff"},
+                        {name: "电竞慈善家", desc: "致力于给对手送人头/温暖"},
+                        {name: "量子波动输出法传人", desc: "输出方式玄妙不可测"}
+                    ]
+                }
+            ];
+            
+            // Initialize
+            updateRankDisplay(0);
+            moveTarget();
+            
+            // Theme toggle
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('light-mode');
+                themeToggle.innerHTML = document.body.classList.contains('light-mode') ? 
+                    '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            });
+            
+            // Settings dropdown toggle
+            settingsToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                settingsDropdown.classList.toggle('show');
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!settingsDropdown.contains(e.target) && e.target !== settingsToggle) {
+                    settingsDropdown.classList.remove('show');
+                }
+            });
+            
+            // Color selection
+            colorOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    // Remove active class from all options
+                    colorOptions.forEach(opt => opt.classList.remove('active'));
+                    
+                    // Add active class to clicked option
+                    option.classList.add('active');
+                    
+                    // Remove image if present
+                    target.innerHTML = '';
+                    target.style.background = option.style.background;
+                });
+            });
+            
+            // Image upload
+            uploadTrigger.addEventListener('click', () => {
+                imageUpload.click();
+            });
+            
+            imageUpload.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        // Remove background color
+                        target.style.background = 'none';
+                        
+                        // Create image element
+                        target.innerHTML = `<img src="${event.target.result}" alt="Custom target">`;
+                        
+                        // Remove active class from color options
+                        colorOptions.forEach(opt => opt.classList.remove('active'));
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Start game
+            startBtn.addEventListener('click', startGame);
+            
+            // Reset game
+            resetBtn.addEventListener('click', resetGame);
+            
+            // Reset target position
+            resetTargetBtn.addEventListener('click', moveTarget);
+            
+            // Close result
+            closeResult.addEventListener('click', () => {
+                resultOverlay.classList.remove('show');
+            });
+            
+            // Click target
+            target.addEventListener('click', () => {
+                if (!gameActive) return;
+                
+                // Increase score
+                score++;
+                clicks++;
+                scoreElement.textContent = score;
+                
+                // Update CPS
+                updateCPS();
+                
+                // Increase difficulty
+                increaseDifficulty();
+                
+                // Move target
+                moveTarget();
+            });
+            
+            function startGame() {
+                if (gameActive) return;
+                
+                // Reset game state
+                resetGame();
+                gameActive = true;
+                startTime = Date.now();
+                clicks = 0;
+                
+                // Start timers
+                timer = setInterval(() => {
+                    timeLeft--;
+                    timeLeftElement.textContent = timeLeft;
+                    timerElement.textContent = `${timeLeft}秒`;
+                    
+                    if (timeLeft <= 0) {
+                        endGame();
+                    }
+                }, 1000);
+                
+                // End game after 30 seconds
+                gameTimer = setTimeout(endGame, 30000);
+                
+                // Disable start button
+                startBtn.disabled = true;
+                
+                // Move target to initial position
+                moveTarget();
+                
+                // Set initial larger target size
+                targetSize = 150;
+                target.style.width = `${targetSize}px`;
+                target.style.height = `${targetSize}px`;
+            }
+            
+            function resetGame() {
+                // Clear timers
+                clearInterval(timer);
+                clearTimeout(gameTimer);
+                
+                // Reset variables
+                score = 0;
+                timeLeft = 30;
+                gameActive = false;
+                level = 1;
+                targetSize = 150;
+                
+                // Update UI
+                scoreElement.textContent = score;
+                timeLeftElement.textContent = timeLeft;
+                timerElement.textContent = `${timeLeft}秒`;
+                cpsElement.textContent = "0.00";
+                levelElement.textContent = level;
+                
+                // Reset target size
+                target.style.width = `${targetSize}px`;
+                target.style.height = `${targetSize}px`;
+                
+                // Enable start button
+                startBtn.disabled = false;
+                
+                // Update rank display
+                updateRankDisplay(0);
+                
+                // Hide settings dropdown
+                settingsDropdown.classList.remove('show');
+                
+                // Hide result overlay
+                resultOverlay.classList.remove('show');
+                
+                // Reset target position
+                moveTarget();
+            }
+            
+            function endGame() {
+                gameActive = false;
+                clearInterval(timer);
+                clearTimeout(gameTimer);
+                
+
+                
+                // Calculate final CPS
+                const cps = score / 30;
+                cpsElement.textContent = cps.toFixed(2);
+                
+                // Show result overlay
+                resultCps.textContent = `${cps.toFixed(2)} CPS`;
+                
+                // Get and display rank
+                const rank = getRank(cps);
+                resultRank.textContent = rank.name;
+                resultDescription.textContent = rank.desc;
+                
+                resultOverlay.classList.add('show');
+                
+                // Enable start button
+                startBtn.disabled = false;
+            }
+            
+            function moveTarget() {
+                const container = targetContainer;
+                const containerRect = container.getBoundingClientRect();
+                
+                // Calculate maximum positions
+                const maxX = containerRect.width - target.offsetWidth;
+                const maxY = containerRect.height - target.offsetHeight;
+                
+                // Ensure the target stays within the container
+                const randomX = Math.max(0, Math.min(maxX, Math.floor(Math.random() * maxX)));
+                const randomY = Math.max(0, Math.min(maxY, Math.floor(Math.random() * maxY)));
+                
+                // Apply new position
+                target.style.left = `${randomX}px`;
+                target.style.top = `${randomY}px`;
+            }
+            
+            function increaseDifficulty() {
+                // Level up every 10 points
+                const newLevel = Math.floor(score / 10) + 1;
+                
+                if (newLevel > level) {
+                    level = newLevel;
+                    levelElement.textContent = level;
+                    
+                    // Decrease target size (min 40px)
+                    targetSize = Math.max(40, 150 - (level * 8));
+                    target.style.width = `${targetSize}px`;
+                    target.style.height = `${targetSize}px`;
+                    
+                    // Update rank display
+                    const cps = clicks / ((Date.now() - startTime) / 1000);
+                    updateRankDisplay(cps);
+                }
+            }
+            
+            function updateCPS() {
+                const elapsedTime = (Date.now() - startTime) / 1000;
+                if (elapsedTime > 0.5) {
+                    const cps = clicks / elapsedTime;
+                    cpsElement.textContent = cps.toFixed(2);
+                    
+                    // Update rank display
+                    updateRankDisplay(cps);
+                }
+            }
+            
+            function updateRankDisplay(cps) {
+                const rank = getRank(cps);
+                currentRank.textContent = rank.tier;
+                rankRange.textContent = `${rank.minCPS.toFixed(1)} - ${rank.maxCPS === 999 ? "∞" : rank.maxCPS.toFixed(1)} CPS`;
+                rankDescription.textContent = rank.desc;
+            }
+            
+            function getRank(cps) {
+                let selectedRank = ranks[6]; // Default to special rank
+                
+                // Find matching rank tier
+                for (const rank of ranks) {
+                    if (cps >= rank.minCPS && cps < rank.maxCPS) {
+                        selectedRank = rank;
+                        break;
+                    }
+                }
+                
+                // Select random name from the tier
+                const randomName = selectedRank.names[Math.floor(Math.random() * selectedRank.names.length)];
+                
+                return {
+                    tier: selectedRank.tier,
+                    name: randomName.name,
+                    desc: randomName.desc,
+                    minCPS: selectedRank.minCPS,
+                    maxCPS: selectedRank.maxCPS
+                };
+            }
+            
+            // Create floating elements
+            function createFloatingElements() {
+                const emojis = ['🔫', '🎯', '💥', '🔥', '⚡', '👾', '💣', '🧨', '🕹️', '🎮'];
+                const texts = ['菜就多练', '我马枪了', '人形自走挂', '电子厂预备役', '战术核显卡', 
+                              '夕阳红枪法', '描边大师', '刮痧之王', '人体描边', '空大艺术家'];
+                
+                // Create emojis
+                for (let i = 0; i < 15; i++) {
+                    const emoji = document.createElement('div');
+                    emoji.className = 'floating';
+                    emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    emoji.style.left = `${Math.random() * 100}%`;
+                    emoji.style.top = `${Math.random() * 100}%`;
+                    emoji.style.fontSize = `${Math.random() * 2 + 1.5}rem`;
+                    emoji.style.animationDuration = `${Math.random() * 10 + 15}s`;
+                    document.body.appendChild(emoji);
+                }
+                
+                // Create texts
+                for (let i = 0; i < 10; i++) {
+                    const text = document.createElement('div');
+                    text.className = 'floating-text';
+                    text.textContent = texts[Math.floor(Math.random() * texts.length)];
+                    text.style.left = `${Math.random() * 100}%`;
+                    text.style.top = `${Math.random() * 100}%`;
+                    text.style.fontSize = `${Math.random() * 0.5 + 1.2}rem`;
+                    text.style.animationDuration = `${Math.random() * 15 + 25}s`;
+                    document.body.appendChild(text);
+                }
+            }
+            
+            // Initialize floating elements
+            createFloatingElements();
+        });
+    </script>
+</body>
+</html>
